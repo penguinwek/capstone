@@ -1,9 +1,9 @@
 import React from 'react'
 import { S3 } from 'aws-sdk'
 
-const accessKeyId = 'AKIAWU5KMJHA6YDCYV3X'
-const secretAccessKey = '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'
-const region = 'ap-southeast-1'
+const accessKeyId = process.env.accessKeyId
+const secretAccessKey = process.env.secretAccessKey
+const region = process.env.region
 
 const s3 = new S3({
     secretAccessKey,
@@ -55,14 +55,12 @@ const makeSignedURL = async ({filename, filetype}: makeSignedURLArgs): Promise<s
         const signedUrlExpireSeconds = 60 * 60;
         s3.getSignedUrl('putObject', {
             Expires: signedUrlExpireSeconds, 
-            Bucket: 'capstone-robekoc',
-            // Path: '/uploads/',
+            Bucket: process.env.bucket,
             Key: filename, 
             ACL: 'bucket-owner-full-control',
             ContentType: filetype
         }, (err, url) => {
             if (err) {
-                console.log("AHHHHHHHHH")
                 reject(err)
             }
             resolve(url) 
